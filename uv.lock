@@ -196,10 +196,14 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "githubkit" },
+    { name = "httpx" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "githubkit", specifier = ">=0.16.0" }]
+requires-dist = [
+    { name = "githubkit", specifier = ">=0.16.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
+]
 
 [[package]]
 name = "pydantic"
