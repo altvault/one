@@ -8,3 +8,4 @@ dependencies = []
 
 [tool.uv]
 exclude-newer = "48 hours"
+package = true
