@@ -1,6 +1,5 @@
-import json
 from abc import ABC, abstractmethod
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
@@ -33,6 +32,9 @@ class StepResult:
     name: Literal["custom_apollo", "cyan", "downloadipa", "ipapatch", "prebuilt"]
     data: list[FileInfo] = field(default_factory=list)
 
+    def to_dict(self):
+        return {"name": self.name, "data": [x.to_dict() for x in self.data]}
+
 
 @dataclass
 class FileInfo:
@@ -41,12 +43,10 @@ class FileInfo:
     sha256: str
     extracted_files: list[Path] = field(default_factory=list)
 
-
-def file_info_serializer(obj):
-    if isinstance(obj, Path):
-        return obj.name
-    raise TypeError(f"Type {type(obj).__name__} not serializable")
-
-
-def file_info_to_json(data: FileInfo) -> str:
-    return json.dumps(asdict(data), default=file_info_serializer, indent=4)
+    def to_dict(self):
+        return {
+            "path": self.path.name,
+            "url": self.url,
+            "sha256": self.sha256,
+            "extracted_files": [x.name for x in self.extracted_files],
+        }
