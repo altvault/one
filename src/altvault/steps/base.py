@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Literal
 from githubkit import GitHub
 
 if TYPE_CHECKING:
-    from altvault.recipe import Recipe, Tweak
+    from altvault.recipes.base import Recipe, Tweak
 
 
 @dataclass(frozen=True)

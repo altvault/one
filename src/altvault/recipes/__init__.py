@@ -1,5 +1,5 @@
 from typing import NamedTuple
-from altvault.recipe import Recipe, Tweak
+
 from altvault.recipes import (
     apollo,
     facebook,
@@ -9,6 +9,7 @@ from altvault.recipes import (
     youtube,
     youtubemusic,
 )
+from altvault.recipes.base import Recipe, Tweak
 
 recipes: dict[str, Recipe] = {}
 

@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from altvault.download.github import GitHubReleaseFile
-from altvault.recipe import Recipe, Tweak
-from altvault.steps.base import Step, Context
+from altvault.recipes.base import Recipe, Tweak
+from altvault.steps.base import Context, Step
 from altvault.steps.prebuilt import PrebuiltStep
 
 

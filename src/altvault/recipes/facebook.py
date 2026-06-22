@@ -1,5 +1,5 @@
 from altvault.download.github import GitHubReleaseFile
-from altvault.recipe import Recipe, Tweak
+from altvault.recipes.base import Recipe, Tweak
 from altvault.steps.cyan import CyanStep
 from altvault.steps.downloadipa import DownloadIpaStep
 

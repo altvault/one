@@ -1,7 +1,7 @@
 from altvault.download.cydia import CydiaRepoFile
 from altvault.download.github import GitHubReleaseFile
 from altvault.github import GITHUB_OWNER
-from altvault.recipe import Recipe, Tweak
+from altvault.recipes.base import Recipe, Tweak
 from altvault.steps.cyan import CyanStep
 from altvault.steps.downloadipa import DownloadIpaStep
 
