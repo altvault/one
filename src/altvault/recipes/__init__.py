@@ -1,25 +1,18 @@
+import importlib
+import pkgutil
 from typing import NamedTuple
 
-from altvault.recipes import (
-    apollo,
-    facebook,
-    infuse,
-    instagram,
-    x,
-    youtube,
-    youtubemusic,
-)
 from altvault.recipes.base import Recipe, Tweak
 
 recipes: dict[str, Recipe] = {}
 
-recipes[apollo.recipe.name] = apollo.recipe
-recipes[facebook.recipe.name] = facebook.recipe
-recipes[infuse.recipe.name] = infuse.recipe
-recipes[instagram.recipe.name] = instagram.recipe
-recipes[x.recipe.name] = x.recipe
-recipes[youtube.recipe.name] = youtube.recipe
-recipes[youtubemusic.recipe.name] = youtubemusic.recipe
+for _, module_name, is_pkg in pkgutil.iter_modules(__path__):
+    if module_name == "base":
+        continue
+    module = importlib.import_module(f"{__name__}.{module_name}")
+    recipe = getattr(module, "recipe", None)
+    if isinstance(recipe, Recipe):
+        recipes[recipe.name] = recipe
 
 
 def get_recipe(name: str | None, bundle_identifier: str | None) -> Recipe:
