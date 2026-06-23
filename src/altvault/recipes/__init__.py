@@ -1,6 +1,6 @@
 import importlib
 import pkgutil
-from typing import NamedTuple
+from typing import NamedTuple, overload
 
 from altvault.recipes.base import Recipe, Tweak
 
@@ -15,7 +15,17 @@ for _, module_name, is_pkg in pkgutil.iter_modules(__path__):
         recipes[recipe.name] = recipe
 
 
-def get_recipe(name: str | None, bundle_identifier: str | None) -> Recipe:
+@overload
+def get_recipe(*, name: str, bundle_identifier: str | None = None) -> Recipe: ...
+
+
+@overload
+def get_recipe(*, name: str | None = None, bundle_identifier: str) -> Recipe: ...
+
+
+def get_recipe(
+    *, name: str | None = None, bundle_identifier: str | None = None
+) -> Recipe:
     if not name and not bundle_identifier:
         raise ValueError("Missing name or bundle_identifier")
     for r in recipes.values():
