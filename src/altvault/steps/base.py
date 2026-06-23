@@ -22,8 +22,8 @@ class Context:
     app_version: str
     github_client: GitHub
     work_dir: Path
-    current_ipa_path: Path
-    tweak_version_label: str
+    current_ipa_path: Path | None = None
+    tweak_version_label: str | None = None
     step_results: list[StepResult] = field(default_factory=list)
 
 
