@@ -1,5 +1,7 @@
+import datetime as dt
 import json
 from dataclasses import dataclass
+from zoneinfo import ZoneInfo
 
 from altvault.github import GITHUB_OWNER
 from altvault.steps.base import Context, Step
@@ -8,6 +10,12 @@ from altvault.steps.base import Context, Step
 @dataclass(frozen=True)
 class UploadIpaStep(Step):
     def run(self, context: Context) -> None:
+        if not context.current_ipa_path:
+            raise ValueError
+        if not context.tweak_version_label:
+            context.tweak_version_label = dt.datetime.now(
+                ZoneInfo("Asia/Bangkok")
+            ).strftime("%Y%m%d%H%M")
         file_name = f"{context.recipe.name}_{context.app_version}_{context.tweak.name}_{context.tweak_version_label}"
         release_tag = f"{context.app_version}_{context.tweak_version_label}"
         body_json = json.dumps(
