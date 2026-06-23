@@ -15,7 +15,6 @@ from altvault.github import GITHUB_OWNER, create_github_client
 from altvault.recipes import recipes
 from altvault.version import safe_version
 
-EQUAL_SEPARATOR = "=" * 90
 DASH_SEPARATOR = "-" * 90
 CONCURRENCY_LIMIT: int = 15
 
@@ -65,7 +64,7 @@ async def check_forks(github_client: GitHub, sem: asyncio.Semaphore):
     diff_repos: list[CheckForkBehindResult] = []
     completed: int = 0
     total: int = len(tasks)
-    print(EQUAL_SEPARATOR)
+    print()
     for task in asyncio.as_completed(tasks):
         result = await task
         if result and result.status != "identical":
@@ -73,7 +72,7 @@ async def check_forks(github_client: GitHub, sem: asyncio.Semaphore):
         completed += 1
         print(f"\rForks: Checking {completed:>2}/{total}", end="", flush=True)
     print()
-    print(EQUAL_SEPARATOR)
+    print()
     if diff_repos:
         for item in diff_repos:
             questionary.print(
@@ -166,13 +165,13 @@ async def check_versions(github_client: GitHub, sem: asyncio.Semaphore):
 
         completed: int = 0
         total: int = len(tasks)
-        print(EQUAL_SEPARATOR)
+        print()
         for task in asyncio.as_completed(tasks):
             await task
             completed += 1
             print(f"\rApps: Checking {completed:>2}/{total}", end="", flush=True)
     print()
-    print(EQUAL_SEPARATOR)
+    print()
     print(
         f"{'name':<14}",
         f"{'appstore':<9}",
