@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import subprocess
 from dataclasses import dataclass
 from time import time
 from typing import Literal, NamedTuple
@@ -182,12 +183,15 @@ async def check_versions(github_client: GitHub, sem: asyncio.Semaphore):
         f"{'link'}",
     )
     print(DASH_SEPARATOR)
+    outdated_list: list[CheckVersionResult] = []
     for name, app in recipes.items():
         result = results[name]
         if result.appstore_version and result.decrypted_version:
             result.decrypted_outdated = not app.skip_outdated_check and safe_version(
                 result.appstore_version
             ) > safe_version(result.decrypted_version)
+            if result.decrypted_outdated:
+                outdated_list.append(result)
         if result.appstore_version and result.tweaked_version:
             result.tweaked_outdated = not app.skip_outdated_check and safe_version(
                 result.appstore_version
@@ -201,6 +205,16 @@ async def check_versions(github_client: GitHub, sem: asyncio.Semaphore):
             f"{'✓' if result.tweaked_outdated else '': <2}",
             f"{result.appstore_url}",
         )
+
+    if len(outdated_list) > 0:
+        print()
+        for outdated_result in outdated_list:
+            if await questionary.confirm(
+                f"Update {outdated_result.name} {outdated_result.decrypted_version} -> {outdated_result.appstore_version}",
+                default=True,
+            ).ask_async():
+                telegram_link = f"tg://resolve?domain={recipes[outdated_result.name].telegram_bot}&text={outdated_result.appstore_url}"
+                subprocess.run(["open", telegram_link], check=True)
 
 
 async def get_our_version(
