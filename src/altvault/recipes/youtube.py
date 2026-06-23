@@ -8,6 +8,7 @@ from altvault.steps.downloadipa import DownloadIpaStep
 recipe = Recipe(
     name="YouTube",
     bundle_identifier="com.google.ios.youtube",
+    telegram_bot="eeveedecrypterbot",
     tweaks=[
         Tweak(
             name="MyYouTube",

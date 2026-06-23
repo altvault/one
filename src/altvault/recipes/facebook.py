@@ -6,6 +6,7 @@ from altvault.steps.downloadipa import DownloadIpaStep
 recipe = Recipe(
     name="Facebook",
     bundle_identifier="com.facebook.Facebook",
+    telegram_bot="eeveedecrypterbot",
     tweaks=[
         Tweak(
             name="FacebookGlow",

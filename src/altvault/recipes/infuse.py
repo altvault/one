@@ -6,6 +6,7 @@ from altvault.steps.downloadipa import DownloadIpaStep
 recipe = Recipe(
     name="Infuse",
     bundle_identifier="com.firecore.infuse",
+    telegram_bot="eeveedecrypterbot",
     tweaks=[
         Tweak(
             name="InfusePlus",

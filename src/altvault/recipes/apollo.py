@@ -17,6 +17,7 @@ recipe = Recipe(
     name="Apollo",
     bundle_identifier="com.christianselig.Apollo",
     skip_outdated_check=True,
+    telegram_bot="eeveedecrypterbot",
     tweaks=[
         Tweak(
             name="ApolloReborn",

@@ -6,6 +6,7 @@ from altvault.steps.downloadipa import DownloadIpaStep
 recipe = Recipe(
     name="X",
     bundle_identifier="com.atebits.Tweetie2",
+    telegram_bot="FastDecryptBot",
     tweaks=[
         Tweak(
             name="BHTwitter",

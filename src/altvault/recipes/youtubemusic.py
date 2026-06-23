@@ -6,6 +6,7 @@ from altvault.steps.downloadipa import DownloadIpaStep
 recipe = Recipe(
     name="YouTubeMusic",
     bundle_identifier="com.google.ios.youtubemusic",
+    telegram_bot="eeveedecrypterbot",
     tweaks=[
         Tweak(
             name="YTMusicUltimate",

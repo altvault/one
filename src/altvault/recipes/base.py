@@ -8,6 +8,7 @@ class Recipe:
     name: str
     bundle_identifier: str
     skip_outdated_check: bool = False
+    telegram_bot: str | None = None
     tweaks: list[Tweak] = field(default_factory=list)
 
     @property

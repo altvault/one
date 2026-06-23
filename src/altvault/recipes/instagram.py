@@ -7,6 +7,7 @@ from altvault.steps.ipapatch import IpapatchStep
 recipe = Recipe(
     name="Instagram",
     bundle_identifier="com.burbn.instagram",
+    telegram_bot="FastDecryptBot",
     tweaks=[
         Tweak(
             name="RyukGram",
