@@ -11,6 +11,8 @@ class CyanStep(Step):
     download_files: list[DownloadFile] = field(default_factory=list)
 
     def run(self, context: Context) -> None:
+        if not context.current_ipa_path:
+            raise ValueError
         file_infos = [file.download(context) for file in self.download_files]
 
         step_path: Path = context.work_dir / "cyan"

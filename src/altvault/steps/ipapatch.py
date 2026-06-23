@@ -2,12 +2,15 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from altvault.steps.base import Step, StepResult
+from altvault.steps.base import Context, Step, StepResult
 
 
 @dataclass(frozen=True)
 class IpapatchStep(Step):
-    def run(self, context):
+    def run(self, context: Context) -> None:
+        if not context.current_ipa_path:
+            raise ValueError
+
         step_path: Path = context.work_dir / "ipapatch"
         step_path.mkdir()
         input_ipa_path: Path = context.current_ipa_path
