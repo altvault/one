@@ -16,6 +16,7 @@ class ApolloRebornTrimVersionStep(Step):
 recipe = Recipe(
     name="Apollo",
     bundle_identifier="com.christianselig.Apollo",
+    skip_outdated_check=True,
     tweaks=[
         Tweak(
             name="ApolloReborn",

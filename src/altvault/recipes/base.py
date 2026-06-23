@@ -7,6 +7,7 @@ from altvault.steps.base import Step
 class Recipe:
     name: str
     bundle_identifier: str
+    skip_outdated_check: bool = False
     tweaks: list[Tweak] = field(default_factory=list)
 
     @property
@@ -19,7 +20,6 @@ class Tweak:
     name: str
     note: str | None = None
     pipeline: list[Step] = field(default_factory=list)
-    skip_download_decrypted_ipa: bool = False
 
     @property
     def files_repo(self) -> str:
