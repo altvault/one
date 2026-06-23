@@ -9,7 +9,7 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    for module in (pipeline, outdated, upload):
+    for module in (outdated, upload, pipeline):
         sub = module.register(subparsers)
         sub.set_defaults(func=module.run)
 
