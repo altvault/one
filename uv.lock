@@ -7,6 +7,25 @@ exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for 
 exclude-newer-span = "PT48H"
 
 [[package]]
+name = "altvault-one"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "githubkit" },
+    { name = "httpx" },
+    { name = "python-debian" },
+    { name = "questionary" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "githubkit", specifier = ">=0.16.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "python-debian", specifier = ">=1.1.1" },
+    { name = "questionary", specifier = ">=2.1.1" },
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -188,25 +207,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/2d/ce/011ffcd8b919f55196ec53f12ae162e21c879d95afba226894314ff62c07/msgpack-1.2.0-cp314-cp314t-win32.whl", hash = "sha256:378caf74c4c718dfc17590ce68a6d710ed398ff6fcf08237de23b77755730b55", size = 70782, upload-time = "2026-06-11T04:16:07.105Z" },
     { url = "https://files.pythonhosted.org/packages/57/a8/9b8791ca96b1be6b9f659c718271e2cb7f99f73f58aad2dd0b30f750f6c0/msgpack-1.2.0-cp314-cp314t-win_amd64.whl", hash = "sha256:553b42598165c4dd3235994fd6e4b0dfb1ce5f3fd33d94ba9609442643015f38", size = 77899, upload-time = "2026-06-11T04:16:08.353Z" },
     { url = "https://files.pythonhosted.org/packages/5b/04/3fa2dffb87bf598696b86bde7cd642d0a7590520c3fa24cd19611dfebeb7/msgpack-1.2.0-cp314-cp314t-win_arm64.whl", hash = "sha256:2825bb1da548d214ab8a810906b7dd69a10f3838b615a2cc46e5172d3cb44f6e", size = 71004, upload-time = "2026-06-11T04:16:09.556Z" },
-]
-
-[[package]]
-name = "one"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "githubkit" },
-    { name = "httpx" },
-    { name = "python-debian" },
-    { name = "questionary" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "githubkit", specifier = ">=0.16.0" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "python-debian", specifier = ">=1.1.1" },
-    { name = "questionary", specifier = ">=2.1.1" },
 ]
 
 [[package]]
