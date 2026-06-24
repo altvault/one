@@ -1,9 +1,66 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
+import { basicAuth } from "hono/basic-auth";
+import { queryReleases } from "./query";
+import { AltSourceApp, AltSourceRepo } from "./types";
+import { parseMetadata } from "./metadata";
 
-const app = new Hono()
+const app = new Hono<{ Bindings: CloudflareBindings }>();
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+app.use(
+  "/*",
+  // Basic Auth Middleware
+  async (c, next) => {
+    if (!c.env.WORKER_USERNAME || !c.env.WORKER_PASSWORD) {
+      return c.json({ error: "Server configuration error" }, 500);
+    }
+    const auth = basicAuth({
+      username: c.env.WORKER_USERNAME,
+      password: c.env.WORKER_PASSWORD,
+    });
+    return auth(c, next);
+  },
+);
 
-export default app
+app.get("/latest.json", async (c) => {
+  const token = c.env.WORKER_GITHUB_TOKEN;
+  if (!token) {
+    return c.json({ error: "Server configuration error" }, 500);
+  }
+
+  const queryResult = await queryReleases(token);
+
+  const altSourceApps: Array<AltSourceApp> = [];
+
+  if (queryResult.data?.search) {
+    for (const release of queryResult.data?.search.nodes) {
+      const metadata = parseMetadata(release.latestRelease.description);
+
+      for (const asset of release.latestRelease.releaseAssets.nodes) {
+        const name = metadata.name || "";
+        const bundleIdentifier = metadata.bundleIdentifier || "";
+
+        altSourceApps.push({
+          name: name,
+          bundleIdentifier: bundleIdentifier,
+          version: release.latestRelease.tagName,
+          localizedDescription: asset.name,
+          downloadURL: asset.url,
+          iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
+          versionDate: asset.createdAt,
+          size: asset.size,
+        });
+      }
+    }
+  }
+
+  const altSourceRepo: AltSourceRepo = {
+    name: "AltVault",
+    identifier: "altvault.latest",
+    iconURL: new URL("/icon.png", c.req.url).toString(),
+    apps: altSourceApps,
+  };
+
+  return c.json(altSourceRepo);
+});
+
+export default app;
