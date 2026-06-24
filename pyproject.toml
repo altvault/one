@@ -11,6 +11,9 @@ dependencies = [
     "questionary>=2.1.1",
 ]
 
+[project.scripts]
+altvault = "altvault.cli.main:main"
+
 [tool.uv]
 exclude-newer = "48 hours"
 package = true
