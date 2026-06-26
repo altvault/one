@@ -12,7 +12,7 @@ class ApolloRebornTrimVersionStep(Step):
     def run(self, context: Context) -> None:
         if context.tweak_version_label:
             version_parts = context.tweak_version_label.removeprefix("v").split("_")
-            context.tweak_version_label = version_parts[1]
+            context.tweak_version_label = version_parts[0]
 
 
 recipe = Recipe(
