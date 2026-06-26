@@ -52,7 +52,7 @@ const query = `query ($searchQuery: String!) {
 }`;
 
 const variables = {
-  searchQuery: `org:${globals.owner} topic:tweaked-ipas`,
+  searchQuery: `org:${globals.owner} topic:tweaked-ipas archived:false`,
 };
 
 export async function queryReleases(token: string) {
