@@ -45,22 +45,24 @@ app.get("/latest.json", async (c) => {
 
   if (queryResult.data?.search) {
     for (const release of queryResult.data?.search.nodes) {
-      const metadata = parseMetadata(release.latestRelease.description);
+      if (release.latestRelease) {
+        const metadata = parseMetadata(release.latestRelease.description);
 
-      for (const asset of release.latestRelease.releaseAssets.nodes) {
-        const name = metadata.name || "";
-        const bundleIdentifier = metadata.bundleIdentifier || "";
+        for (const asset of release.latestRelease.releaseAssets.nodes) {
+          const name = metadata.name || "";
+          const bundleIdentifier = metadata.bundleIdentifier || "";
 
-        altSourceApps.push({
-          name: name,
-          bundleIdentifier: bundleIdentifier,
-          version: release.latestRelease.tagName,
-          localizedDescription: asset.name,
-          downloadURL: asset.url,
-          iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
-          versionDate: asset.createdAt,
-          size: asset.size,
-        });
+          altSourceApps.push({
+            name: name,
+            bundleIdentifier: bundleIdentifier,
+            version: release.latestRelease.tagName,
+            localizedDescription: asset.name,
+            downloadURL: asset.url,
+            iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
+            versionDate: asset.createdAt,
+            size: asset.size,
+          });
+        }
       }
     }
   }
