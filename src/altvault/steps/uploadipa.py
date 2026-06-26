@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from zoneinfo import ZoneInfo
 
 from altvault.github import GITHUB_OWNER
+from altvault.ipa import extract_ipa_metadata
 from altvault.steps.base import Context, Step
 
 
@@ -12,6 +13,8 @@ class UploadIpaStep(Step):
     def run(self, context: Context) -> None:
         if not context.current_ipa_path:
             raise ValueError
+        if context.app_version == "latest":
+            context.app_version = extract_ipa_metadata(context.current_ipa_path).version
         if not context.tweak_version_label:
             context.tweak_version_label = dt.datetime.now(
                 ZoneInfo("Asia/Bangkok")

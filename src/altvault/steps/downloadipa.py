@@ -1,4 +1,3 @@
-from altvault.ipa import extract_ipa_metadata
 from dataclasses import dataclass
 
 from altvault.download.github import GitHubReleaseFile
@@ -17,7 +16,5 @@ class DownloadIpaStep(Step):
         )
         file_info = downloader.download(context)
 
-        if context.app_version == "latest":
-            context.app_version = extract_ipa_metadata(file_info.path).version
         context.current_ipa_path = file_info.path
         context.step_results.append(StepResult(name="downloadipa", data=[file_info]))
