@@ -13,7 +13,7 @@ class Recipe:
 
     @property
     def files_repo(self) -> str:
-        return f"{self.name}-files"
+        return f"files-{self.name}"
 
 
 @dataclass(frozen=True)
@@ -24,4 +24,4 @@ class Tweak:
 
     @property
     def files_repo(self) -> str:
-        return f"{self.name}-files"
+        return f"files-{self.name}"
