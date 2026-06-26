@@ -29,4 +29,5 @@ def run(args: argparse.Namespace):
         )
 
         for step in recipe.tweak.pipeline:
+            print("Step:", type(step).__name__)
             step.run(context=context)
