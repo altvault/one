@@ -19,7 +19,7 @@ class UploadIpaStep(Step):
             context.tweak_version_label = dt.datetime.now(
                 ZoneInfo("Asia/Bangkok")
             ).strftime("%Y%m%d%H%M")
-        file_name = f"{context.recipe.name}_{context.app_version}_{context.tweak.name}_{context.tweak_version_label}"
+        file_name = f"{context.recipe.name}_{context.app_version}_{context.tweak.name}_{context.tweak_version_label}.ipa"
         release_tag = f"{context.app_version}_{context.tweak_version_label}"
         body_json = json.dumps(
             {
