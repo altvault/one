@@ -1,4 +1,5 @@
 import argparse
+import subprocess
 from pathlib import Path
 
 import questionary
@@ -8,6 +9,8 @@ from altvault.github import GITHUB_OWNER, create_github_client
 from altvault.ipa import extract_ipa_metadata
 from altvault.recipes import get_recipe
 from altvault.version import safe_version
+
+DEFAULT_FOLDER = "~/Downloads/Telegram Desktop/"
 
 
 def register(subparsers: argparse._SubParsersAction):
@@ -29,7 +32,7 @@ def run(args: argparse.Namespace):
     if ipa_path_input is None:
         ipa_path_input = questionary.path(
             "IPA Path",
-            default="~/Downloads/Telegram Desktop/",
+            default=DEFAULT_FOLDER,
             file_filter=ipa_path_filter,
         ).ask()
 
@@ -104,3 +107,14 @@ def run(args: argparse.Namespace):
                     "Content-Length": str(ipa_filesize),
                 },
             )
+
+        if questionary.confirm("Delete file?", default=True).ask():
+            subprocess.run(["trash", ipa_path])
+
+            default_folder = Path(DEFAULT_FOLDER).expanduser()
+            # if ipa path is in the telegram downloads folder
+            if ipa_path.is_relative_to(default_folder):
+                # if telegram downloads folder is empty
+                if default_folder.is_dir() and not any(default_folder.iterdir()):
+                    if questionary.confirm("Delete folder?", default=True).ask():
+                        subprocess.run(["trash", default_folder])
