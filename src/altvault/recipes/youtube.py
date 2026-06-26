@@ -1,3 +1,4 @@
+from altvault.steps.uploadipa import UploadIpaStep
 from altvault.download.cydia import CydiaRepoFile
 from altvault.download.github import GitHubReleaseFile
 from altvault.github import GITHUB_OWNER
@@ -64,6 +65,7 @@ recipe = Recipe(
                         # ),
                     ]
                 ),
+                UploadIpaStep(),
             ],
         ),
         Tweak(
@@ -90,6 +92,7 @@ recipe = Recipe(
                         ),
                     ]
                 ),
+                UploadIpaStep(),
             ],
         ),
     ],

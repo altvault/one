@@ -4,6 +4,7 @@ from altvault.download.github import GitHubReleaseFile
 from altvault.recipes.base import Recipe, Tweak
 from altvault.steps.base import Context, Step
 from altvault.steps.prebuilt import PrebuiltStep
+from altvault.steps.uploadipa import UploadIpaStep
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,7 @@ recipe = Recipe(
                     )
                 ),
                 ApolloRebornTrimVersionStep(),
+                UploadIpaStep(),
             ],
             # pipeline=[
             #     DownloadIpaStep(),
@@ -45,7 +47,8 @@ recipe = Recipe(
             #             )
             #         ]
             #     ),
-            #     CustomApolloStep()
+            #     CustomApolloStep(),
+            #     UploadIpaStep(),
             # ],
         )
     ],

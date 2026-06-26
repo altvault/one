@@ -3,6 +3,7 @@ from altvault.recipes.base import Recipe, Tweak
 from altvault.steps.cyan import CyanStep
 from altvault.steps.downloadipa import DownloadIpaStep
 from altvault.steps.ipapatch import IpapatchStep
+from altvault.steps.uploadipa import UploadIpaStep
 
 recipe = Recipe(
     name="Instagram",
@@ -25,6 +26,7 @@ recipe = Recipe(
                     ]
                 ),
                 IpapatchStep(),
+                UploadIpaStep(),
             ],
         ),
         Tweak(
@@ -42,6 +44,7 @@ recipe = Recipe(
                     ]
                 ),
                 IpapatchStep(),
+                UploadIpaStep(),
             ],
         ),
     ],
