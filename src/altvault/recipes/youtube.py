@@ -63,6 +63,11 @@ recipe = Recipe(
                         #     repo="YTAppVersionSpoofer",
                         #     endswith="arm.deb",
                         # ),
+                        # GitHubReleaseFile(
+                        #     owner="Mark02-2012",
+                        #     repo="YTPlaybackFix",
+                        #     endswith="YTPlaybackFix.dylib",
+                        # ),
                     ]
                 ),
                 UploadIpaStep(),
