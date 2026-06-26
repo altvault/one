@@ -38,7 +38,7 @@ recipe = Recipe(
                         GitHubReleaseFile(
                             owner="SoCuul",
                             repo="SCInsta",
-                            endswith="rootful.deb",
+                            endswith="rootless.deb",
                             use_version=True,
                         )
                     ]
