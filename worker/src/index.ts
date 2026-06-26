@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { basicAuth } from "hono/basic-auth";
+import { createAppAuth } from "@octokit/auth-app";
 import { queryReleases } from "./query";
 import { AltSourceApp, AltSourceRepo } from "./types";
 import { parseMetadata } from "./metadata";
@@ -10,19 +11,30 @@ app.use(
   "/*",
   // Basic Auth Middleware
   async (c, next) => {
-    if (!c.env.WORKER_USERNAME || !c.env.WORKER_PASSWORD) {
+    if (!c.env.BASICAUTH_USERNAME || !c.env.BASICAUTH_PASSWORD) {
       return c.json({ error: "Server configuration error" }, 500);
     }
     const auth = basicAuth({
-      username: c.env.WORKER_USERNAME,
-      password: c.env.WORKER_PASSWORD,
+      username: c.env.BASICAUTH_USERNAME,
+      password: c.env.BASICAUTH_PASSWORD,
     });
     return auth(c, next);
   },
 );
 
 app.get("/latest.json", async (c) => {
-  const token = c.env.WORKER_GITHUB_TOKEN;
+  if (!c.env.GITHUB_APP_ID || !c.env.GITHUB_APP_PRIVATE_KEY) {
+    return c.json({ error: "Server configuration error" }, 500);
+  }
+  const appAuth = createAppAuth({
+    appId: c.env.GITHUB_APP_ID,
+    privateKey: c.env.GITHUB_APP_PRIVATE_KEY,
+  });
+
+  const { token } = await appAuth({
+    type: "installation",
+    installationId: c.env.GITHUB_APP_INSTALLATION_ID,
+  });
   if (!token) {
     return c.json({ error: "Server configuration error" }, 500);
   }
