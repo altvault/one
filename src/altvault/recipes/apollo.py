@@ -12,7 +12,9 @@ class ApolloRebornTrimVersionStep(Step):
     def run(self, context: Context) -> None:
         if context.tweak_version_label:
             version_parts = context.tweak_version_label.removeprefix("v").split("_")
-            context.tweak_version_label = version_parts[0]
+            # override app version as the version in Info.plist has been replaced
+            context.app_version = version_parts[0]
+            context.tweak_version_label = version_parts[1]
 
 
 recipe = Recipe(
