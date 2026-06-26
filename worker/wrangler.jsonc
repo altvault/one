@@ -6,4 +6,8 @@
   "assets": {
     "directory": "./public",
   },
+  "vars": {
+    "GITHUB_APP_ID": "4150349",
+    "GITHUB_APP_INSTALLATION_ID": "142711687",
+  },
 }
