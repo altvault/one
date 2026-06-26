@@ -1,5 +1,5 @@
 {
-  "name": "worker",
+  "name": "altvault",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
