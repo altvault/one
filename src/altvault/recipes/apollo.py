@@ -9,8 +9,9 @@ from altvault.steps.prebuilt import PrebuiltStep
 @dataclass(frozen=True)
 class ApolloRebornTrimVersionStep(Step):
     def run(self, context: Context) -> None:
-        version_parts = context.tweak_version_label.removeprefix("v").split("_")
-        context.tweak_version_label = version_parts[1]
+        if context.tweak_version_label:
+            version_parts = context.tweak_version_label.removeprefix("v").split("_")
+            context.tweak_version_label = version_parts[1]
 
 
 recipe = Recipe(
