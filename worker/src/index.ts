@@ -67,6 +67,8 @@ app.get("/latest.json", async (c) => {
     }
   }
 
+  altSourceApps.sort((a, b) => b.versionDate.localeCompare(a.versionDate)); // desc
+
   const altSourceRepo: AltSourceRepo = {
     name: "AltVault",
     identifier: "altvault.latest",
