@@ -29,7 +29,9 @@ class Context:
 
 @dataclass
 class StepResult:
-    name: Literal["custom_apollo", "cyan", "downloadipa", "ipapatch", "prebuilt"]
+    name: Literal[
+        "custom_apollo", "cyan", "downloadipa", "ipapatch", "prebuilt", "manualupload"
+    ]
     data: list[FileInfo] = field(default_factory=list)
 
     def to_dict(self):
