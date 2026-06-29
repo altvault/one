@@ -20,6 +20,9 @@ class ManualUploadStep(Step):
         if url is None:
             raise ValueError
 
+        tweak_version_label = questionary.path("Tweak Version").ask()
+        context.tweak_version_label = tweak_version_label
+
         with open(file_path, "rb") as f:
             sha256 = hashlib.file_digest(f, "sha256")
 
