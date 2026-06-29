@@ -13,7 +13,7 @@ class UploadIpaStep(Step):
     def run(self, context: Context) -> None:
         if not context.current_ipa_path:
             raise ValueError
-        if context.app_version == "latest":
+        if not context.app_version or context.app_version == "latest":
             context.app_version = extract_ipa_metadata(context.current_ipa_path).version
         if not context.tweak_version_label:
             context.tweak_version_label = dt.datetime.now(
