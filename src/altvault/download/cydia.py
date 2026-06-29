@@ -16,7 +16,7 @@ def _fetch_cydia_repo(url: str) -> list[Packages]:
     packages_gz_url = f"{url}/Packages.gz"
     response = httpx.get(packages_gz_url)
     content = gzip.decompress(response.content).decode("utf-8")
-    packages = list(Packages.iter_paragraphs(content))
+    packages = list(Packages.iter_paragraphs(content, use_apt_pkg=False))
     return packages
 
 
