@@ -2,6 +2,7 @@ from altvault.download.github import GitHubReleaseFile
 from altvault.recipes.base import Recipe, Tweak
 from altvault.steps.cyan import CyanStep
 from altvault.steps.downloadipa import DownloadIpaStep
+from altvault.steps.manualupload import ManualUploadStep
 from altvault.steps.uploadipa import UploadIpaStep
 
 recipe = Recipe(
@@ -9,6 +10,7 @@ recipe = Recipe(
     bundle_identifier="com.atebits.Tweetie2",
     telegram_bot="FastDecryptBot",
     tweaks=[
+        Tweak(name="DLTwitter", pipeline=[ManualUploadStep(), UploadIpaStep()]),
         Tweak(
             name="BHTwitter",
             pipeline=[
@@ -25,6 +27,6 @@ recipe = Recipe(
                 ),
                 UploadIpaStep(),
             ],
-        )
+        ),
     ],
 )
