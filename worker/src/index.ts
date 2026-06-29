@@ -53,7 +53,7 @@ app.get("/latest.json", async (c) => {
           const bundleIdentifier = metadata.bundleIdentifier || "";
 
           altSourceApps.push({
-            name: name,
+            name: `${name} (${release.name.replace("files-", "")})`,
             bundleIdentifier: bundleIdentifier,
             version: release.latestRelease.tagName,
             localizedDescription: asset.name,

@@ -4,6 +4,7 @@ type GithubSearchResponse = {
   data?: {
     search: {
       nodes: Array<{
+        name: string;
         latestRelease: {
           tagName: string;
           releaseAssets: {
@@ -34,6 +35,7 @@ const query = `query ($searchQuery: String!) {
   search(query: $searchQuery, type: REPOSITORY, first: 100) {
     nodes {
       ... on Repository {
+        name
         latestRelease {
           tagName
           releaseAssets(first: 100) {
