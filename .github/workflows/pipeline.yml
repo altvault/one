@@ -35,7 +35,7 @@ jobs:
         run: |
           uv sync --locked
       - name: Run brew install
-        run: brew install cyan ipapatch
+        run: brew install cyan ipapatch dpkg
       - uses: actions/create-github-app-token@v3
         id: app-token
         with:
