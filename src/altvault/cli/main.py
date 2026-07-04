@@ -1,7 +1,7 @@
 import questionary
 import argparse
 
-from altvault.cli import outdated, pipeline, upload
+from altvault.cli import outdated, pipeline, upload, dispatch
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    for module in (outdated, upload, pipeline):
+    for module in (outdated, upload, pipeline, dispatch):
         sub = module.register(subparsers)
         sub.set_defaults(func=module.run)
 
