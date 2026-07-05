@@ -24,8 +24,10 @@ on:
         default: latest
 jobs:
   run_pipeline:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
+      - name: Workaround to silence homebrew aws/tap warning
+        run: brew untap aws/tap || true
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
