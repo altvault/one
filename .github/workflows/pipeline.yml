@@ -28,11 +28,11 @@ jobs:
     steps:
       - name: Workaround to silence homebrew aws/tap warning
         run: brew untap aws/tap || true
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v8.2.0
       - name: Run uv sync
         run: |
           uv sync --locked
