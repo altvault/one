@@ -24,10 +24,8 @@ on:
         default: latest
 jobs:
   run_pipeline:
-    runs-on: macos-26
+    runs-on: ubuntu-latest
     steps:
-      - name: Workaround to silence homebrew aws/tap warning
-        run: brew untap aws/tap || true
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
@@ -36,8 +34,11 @@ jobs:
       - name: Run uv sync
         run: |
           uv sync --locked
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@main
       - name: Run brew install
-        run: brew install cyan ipapatch dpkg
+        run: brew install cyan ipapatch
       - uses: actions/create-github-app-token@v3
         id: app-token
         with:
