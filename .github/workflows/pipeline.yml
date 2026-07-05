@@ -49,4 +49,4 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           PYTHONUNBUFFERED: 1
         run: |
-          uv run altvault pipeline ${{ inputs.tweak_name }} --app-version ${{ inputs.app_version }}
+          uv run altvault pipeline "${{ inputs.tweak_name }}" --app-version "${{ inputs.app_version }}"
