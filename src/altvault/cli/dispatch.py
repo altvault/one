@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+from time import sleep
 
 import questionary
 
@@ -48,6 +49,7 @@ def run(args: argparse.Namespace):
         print()
 
         if result.parsed_data.workflow_run_id:
+            sleep(2)  # wait before displaying the run progress
             subprocess.run(
                 [
                     "gh",
