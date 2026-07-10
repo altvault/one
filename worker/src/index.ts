@@ -4,8 +4,14 @@ import { createAppAuth } from "@octokit/auth-app";
 import { queryReleases } from "./query";
 import { AltSourceApp, AltSourceRepo } from "./types";
 import { parseMetadata } from "./metadata";
+import globals from "../../globals.json";
 
-const app = new Hono<{ Bindings: CloudflareBindings }>();
+const app = new Hono<{
+  Bindings: CloudflareBindings;
+  Variables: {
+    token: string;
+  };
+}>();
 
 app.use(
   "/*",
@@ -20,44 +26,79 @@ app.use(
     });
     return auth(c, next);
   },
+  // GitHub App Token
+  async (c, next) => {
+    // if (!c.env.GITHUB_APP_ID || !c.env.GITHUB_APP_PRIVATE_KEY) {
+    //   return c.json({ error: "Server configuration error" }, 500);
+    // }
+    // const appAuth = createAppAuth({
+    //   appId: c.env.GITHUB_APP_ID,
+    //   privateKey: c.env.GITHUB_APP_PRIVATE_KEY,
+    // });
+    //
+    // const { token } = await appAuth({
+    //   type: "installation",
+    //   installationId: c.env.GITHUB_APP_INSTALLATION_ID,
+    // });
+    // if (!token) {
+    //   return c.json({ error: "Server configuration error" }, 500);
+    // }
+    // c.set("token", token)
+    c.set("token", "###########################");
+    await next();
+  },
 );
 
+app.get("/download/:repo/:tag/:name", async (c) => {
+  const { repo, tag, name } = c.req.param();
+  const token = c.get("token");
+  const downloadUrl = `https://github.com/${globals.owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(name)}`;
+  const response = await fetch(downloadUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/octet-stream",
+      Authorization: `Bearer ${token}`,
+      "User-Agent": "Worker",
+    },
+    redirect: "manual",
+  });
+  const location = response.headers.get("Location");
+  if (location) {
+    return c.redirect(location, 302);
+  }
+  return c.text(
+    `Error\n${JSON.stringify(
+      Object.fromEntries(response.headers.entries()),
+      null,
+      2,
+    )}\n${await response.text()}`,
+  );
+});
+
 app.get("/latest.json", async (c) => {
-  if (!c.env.GITHUB_APP_ID || !c.env.GITHUB_APP_PRIVATE_KEY) {
-    return c.json({ error: "Server configuration error" }, 500);
-  }
-  const appAuth = createAppAuth({
-    appId: c.env.GITHUB_APP_ID,
-    privateKey: c.env.GITHUB_APP_PRIVATE_KEY,
-  });
-
-  const { token } = await appAuth({
-    type: "installation",
-    installationId: c.env.GITHUB_APP_INSTALLATION_ID,
-  });
-  if (!token) {
-    return c.json({ error: "Server configuration error" }, 500);
-  }
-
+  const token = c.get("token");
   const queryResult = await queryReleases(token);
 
   const altSourceApps: Array<AltSourceApp> = [];
 
   if (queryResult.data?.search) {
-    for (const release of queryResult.data?.search.nodes) {
-      if (release.latestRelease) {
-        const metadata = parseMetadata(release.latestRelease.description);
+    for (const repo of queryResult.data?.search.nodes) {
+      if (repo.latestRelease) {
+        const metadata = parseMetadata(repo.latestRelease.description);
 
-        for (const asset of release.latestRelease.releaseAssets.nodes) {
+        for (const asset of repo.latestRelease.releaseAssets.nodes) {
           const name = metadata.name || "";
           const bundleIdentifier = metadata.bundleIdentifier || "";
 
           altSourceApps.push({
-            name: `${name} (${release.name.replace("files-", "")})`,
+            name: `${name} (${repo.name.replace("files-", "")})`,
             bundleIdentifier: bundleIdentifier,
-            version: release.latestRelease.tagName,
+            version: repo.latestRelease.tagName,
             localizedDescription: asset.name,
-            downloadURL: asset.url,
+            downloadURL: new URL(
+              `/download/${repo.name}/${repo.latestRelease.tagName}/${asset.name}`,
+              c.req.url,
+            ).toString(),
             iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
             versionDate: asset.createdAt,
             size: asset.size,
