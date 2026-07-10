@@ -15,6 +15,7 @@ on:
           - MyYouTube
           - RyukGram
           - SCInsta
+          - SparkleIG
           - YouMod
           - YTMusicUltimate
       app_version:

@@ -30,6 +30,24 @@ recipe = Recipe(
             ],
         ),
         Tweak(
+            name="SparkleIG",
+            pipeline=[
+                DownloadIpaStep(),
+                CyanStep(
+                    download_files=[
+                        GitHubReleaseFile(
+                            owner="efibalogh",
+                            repo="sparkle-ig",
+                            endswith="rootless.deb",
+                            use_version=True,
+                        )
+                    ]
+                ),
+                IpapatchStep(),
+                UploadIpaStep(),
+            ],
+        ),
+        Tweak(
             name="SCInsta",
             pipeline=[
                 DownloadIpaStep(),
