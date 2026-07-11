@@ -40,6 +40,7 @@ recipe = Recipe(
                             repo="sparkle-ig",
                             endswith="rootless.deb",
                             use_version=True,
+                            extract_deb_file_list=["Sparkle.dylib", "Sparkle.bundle"],
                         )
                     ]
                 ),
