@@ -49,19 +49,21 @@ app.get("/latest.json", async (c) => {
         const metadata = parseMetadata(release.latestRelease.description);
 
         for (const asset of release.latestRelease.releaseAssets.nodes) {
-          const name = metadata.name || "";
-          const bundleIdentifier = metadata.bundleIdentifier || "";
+          if (asset.name.endsWith(".ipa")) {
+            const name = metadata.name || "";
+            const bundleIdentifier = metadata.bundleIdentifier || "";
 
-          altSourceApps.push({
-            name: `${name} (${release.name.replace("files-", "")})`,
-            bundleIdentifier: bundleIdentifier,
-            version: release.latestRelease.tagName,
-            localizedDescription: asset.name,
-            downloadURL: asset.url,
-            iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
-            versionDate: asset.createdAt,
-            size: asset.size,
-          });
+            altSourceApps.push({
+              name: `${name} (${release.name.replace("files-", "")})`,
+              bundleIdentifier: bundleIdentifier,
+              version: release.latestRelease.tagName,
+              localizedDescription: asset.name,
+              downloadURL: asset.url,
+              iconURL: new URL(`/icon/${name}.jpg`, c.req.url).toString(),
+              versionDate: asset.createdAt,
+              size: asset.size,
+            });
+          }
         }
       }
     }
