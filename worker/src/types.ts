@@ -1,3 +1,14 @@
+import { createFactory } from "hono/factory";
+
+type HonoAppType = {
+  Bindings: CloudflareBindings;
+  Variables: {
+    github_token: string;
+  };
+};
+
+export const factory = createFactory<HonoAppType>();
+
 export type AltSourceApp = {
   name: string;
   bundleIdentifier: string;
