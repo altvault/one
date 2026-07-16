@@ -11,25 +11,6 @@ recipe = Recipe(
     telegram_bot="FastDecryptBot",
     tweaks=[
         Tweak(
-            name="RyukGram",
-            pipeline=[
-                DownloadIpaStep(),
-                CyanStep(
-                    download_files=[
-                        GitHubReleaseFile(
-                            owner="faroukbmiled",
-                            repo="RyukGram",
-                            endswith="rootless.deb",
-                            use_version=True,
-                            extract_deb_file_list=["RyukGram.dylib", "RyukGram.bundle"],
-                        )
-                    ]
-                ),
-                IpapatchStep(),
-                UploadIpaStep(),
-            ],
-        ),
-        Tweak(
             name="SparkleIG",
             pipeline=[
                 DownloadIpaStep(),
@@ -41,6 +22,25 @@ recipe = Recipe(
                             endswith="rootless.deb",
                             use_version=True,
                             extract_deb_file_list=["Sparkle.dylib", "Sparkle.bundle"],
+                        )
+                    ]
+                ),
+                IpapatchStep(),
+                UploadIpaStep(),
+            ],
+        ),
+        Tweak(
+            name="RyukGram",
+            pipeline=[
+                DownloadIpaStep(),
+                CyanStep(
+                    download_files=[
+                        GitHubReleaseFile(
+                            owner="faroukbmiled",
+                            repo="RyukGram",
+                            endswith="rootless.deb",
+                            use_version=True,
+                            extract_deb_file_list=["RyukGram.dylib", "RyukGram.bundle"],
                         )
                     ]
                 ),
