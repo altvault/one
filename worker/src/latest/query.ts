@@ -26,13 +26,13 @@ export async function query({ token }: { token: string }) {
     token,
     query: `
 query ($searchQuery: String!) {
-  search(query: $searchQuery, type: REPOSITORY, first: 100) {
+  search(query: $searchQuery, type: REPOSITORY, first: 30) {
     nodes {
       ... on Repository {
         name
         latestRelease {
           tagName
-          releaseAssets(first: 100) {
+          releaseAssets(first: 20) {
             nodes {
               name
               size
