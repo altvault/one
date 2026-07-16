@@ -37,7 +37,6 @@ query ($searchQuery: String!) {
               name
               size
               createdAt
-              url
             }
           }
           description
