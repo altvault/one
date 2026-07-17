@@ -23,6 +23,7 @@ app.get("/", async (c) => {
               name: `${name} (${repo.name.replace("files-", "")})`,
               bundleIdentifier: bundleIdentifier,
               version: repo.latestRelease.tagName,
+              // subtitle: asset.name,
               localizedDescription: asset.name,
               // downloadURL: asset.url,
               downloadURL: new URL(
