@@ -13,7 +13,6 @@ export type AltSourceApp = {
   name: string;
   bundleIdentifier: string;
   version: string;
-  subtitle?: string;
   localizedDescription: string;
   downloadURL: string;
   iconURL: string;
@@ -24,7 +23,6 @@ export type AltSourceApp = {
 export type AltSourceRepo = {
   name: string;
   identifier: string;
-  subtitle?: string;
   iconURL: string;
   apps: AltSourceApp[];
 };

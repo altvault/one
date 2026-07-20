@@ -37,21 +37,6 @@ recipe = Recipe(
                 ApolloRebornTrimVersionStep(),
                 UploadIpaStep(),
             ],
-            # pipeline=[
-            #     DownloadIpaStep(),
-            #     CyanStep(
-            #         download_files=[
-            #             GitHubReleaseFile(
-            #                 owner="Apollo-Reborn",
-            #                 repo="Apollo-Reborn",
-            #                 endswith="arm.deb",
-            #                 use_version=True,
-            #             )
-            #         ]
-            #     ),
-            #     CustomApolloStep(),
-            #     UploadIpaStep(),
-            # ],
         )
     ],
 )

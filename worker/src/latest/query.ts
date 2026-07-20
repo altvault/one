@@ -12,7 +12,6 @@ type QueryResponse = {
             name: string;
             size: number;
             createdAt: string;
-            url: string;
           }>;
         };
         description: string;
