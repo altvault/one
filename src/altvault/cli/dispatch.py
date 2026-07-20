@@ -5,7 +5,7 @@ from time import sleep
 import questionary
 
 from altvault.github import GITHUB_OWNER, THIS_REPO, create_github_client
-from altvault.recipes import recipes
+from altvault.recipes import get_ci_tweak_names
 
 
 def register(subparsers: argparse._SubParsersAction):
@@ -20,8 +20,9 @@ def run(args: argparse.Namespace):
     app_version = args.app_version
 
     if not tweak_name:
-        all_tweaks = sorted([t.name for r in recipes.values() for t in r.tweaks])
-        tweak_name = questionary.autocomplete("tweak_name:", choices=all_tweaks).ask()
+        tweak_name = questionary.autocomplete(
+            "tweak_name:", choices=get_ci_tweak_names()
+        ).ask()
 
     if not app_version:
         app_version = questionary.text("app_version:", default="latest").ask()

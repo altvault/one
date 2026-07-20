@@ -37,6 +37,8 @@ jobs:
       - name: Run uv sync
         run: |
           uv sync --locked
+      - name: Check tweak options in sync
+        run: uv run altvault sync-workflow --check
       - name: Run brew install
         run: brew install cyan ipapatch dpkg
       - uses: actions/create-github-app-token@v3

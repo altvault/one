@@ -3,6 +3,7 @@ import pkgutil
 from typing import NamedTuple, overload
 
 from altvault.recipes.base import Recipe, Tweak
+from altvault.steps.manualupload import ManualUploadStep
 
 recipes: dict[str, Recipe] = {}
 
@@ -34,6 +35,19 @@ def get_recipe(
 
     raise LookupError(
         f"App not found: name={name!r}, bundle_identifier={bundle_identifier!r}"
+    )
+
+
+def get_ci_tweak_names() -> list[str]:
+    """Tweaks runnable in CI (excludes interactive ManualUploadStep pipelines)."""
+    return sorted(
+        (
+            t.name
+            for r in recipes.values()
+            for t in r.tweaks
+            if not any(isinstance(s, ManualUploadStep) for s in t.pipeline)
+        ),
+        key=str.casefold,
     )
 
 
