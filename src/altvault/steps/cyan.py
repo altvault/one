@@ -12,7 +12,7 @@ class CyanStep(Step):
 
     def run(self, context: Context) -> None:
         if not context.current_ipa_path:
-            raise ValueError
+            raise ValueError("current_ipa_path is not set; no input IPA")
         file_infos = [file.download(context) for file in self.download_files]
 
         step_path: Path = context.work_dir / "cyan"

@@ -37,12 +37,12 @@ def run(args: argparse.Namespace):
         ).ask()
 
     if ipa_path_input is None:
-        raise ValueError
+        raise ValueError("No IPA path provided")
 
     ipa_path = Path(ipa_path_input).expanduser()
 
     if not ipa_path.is_file():
-        raise ValueError
+        raise ValueError(f"Not a file: {ipa_path}")
 
     ipa_filename = ipa_path.name
 

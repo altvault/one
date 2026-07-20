@@ -18,6 +18,8 @@ def extract_ipa_metadata(ipa_path: Path) -> ExtractedIpaMetadata:
             and name.endswith(".app/Info.plist")
             and name.count("/") == 2
         ]
+        if not plist_paths:
+            raise ValueError(f"No Payload/*.app/Info.plist found in {ipa_path.name}")
         plist_data = zf.read(plist_paths[0])
     info = plistlib.loads(plist_data)
     return ExtractedIpaMetadata(

@@ -46,7 +46,10 @@ class GitHubReleaseFile(DownloadFile):
                 break
 
         if asset_to_download is None:
-            raise FileNotFoundError
+            raise FileNotFoundError(
+                f"No matching asset in {self.owner}/{self.repo}@{self.tag} "
+                f"(startswith={self.startswith!r}, endswith={self.endswith!r})"
+            )
 
         download_asset = context.github_client.rest.repos.get_release_asset(
             owner=self.owner,

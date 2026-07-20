@@ -121,6 +121,7 @@ class CheckVersionResult:
     decrypted_outdated: bool | None = None
     tweaked_version: str | None = None
     tweaked_outdated: bool | None = None
+    error: str | None = None
 
 
 type CheckVersionResultDict = dict[str, CheckVersionResult]
@@ -197,12 +198,12 @@ async def check_versions(github_client: GitHub, sem: asyncio.Semaphore):
             ) > safe_version(result.tweaked_version)
         print(
             f"{result.name:<14}",
-            f"{result.appstore_version:<9}",
+            f"{result.appstore_version or '':<9}",
             f"{result.decrypted_version or '':<9}",
             f"{'✓' if result.decrypted_outdated else '': <2}",
             f"{result.tweaked_version or '':<9}",
             f"{'✓' if result.tweaked_outdated else '': <2}",
-            f"{result.appstore_url}",
+            f"{result.error or result.appstore_url or ''}",
         )
 
     if len(outdated_list) > 0:
@@ -238,10 +239,10 @@ async def get_our_version(
                 ]
 
         except RequestFailed as e:
-            if e.response.status_code == 404:
-                return None
-            else:
-                raise
+            if e.response.status_code != 404:
+                results[name].error = f"{version_of}: HTTP {e.response.status_code}"
+        except Exception as e:
+            results[name].error = f"{version_of}: {type(e).__name__}: {e}"
 
 
 async def get_appstore_version(
@@ -250,12 +251,20 @@ async def get_appstore_version(
     results: CheckVersionResultDict,
     client: httpx.AsyncClient,
 ):
-    response = await client.get(
-        f"https://itunes.apple.com/lookup?bundleId={bundle_identifier}&cacheBusting={time()}"
-    )
-    data = response.json()
-    results[name].appstore_version = data["results"][0]["version"]
-    results[name].appstore_url = data["results"][0]["trackViewUrl"]
+    try:
+        response = await client.get(
+            f"https://itunes.apple.com/lookup?bundleId={bundle_identifier}&cacheBusting={time()}"
+        )
+        response.raise_for_status()
+        data = response.json()
+        if not data["results"]:
+            results[name].error = "not found in App Store"
+            return
+        results[name].appstore_version = data["results"][0]["version"]
+        results[name].appstore_url = data["results"][0]["trackViewUrl"]
+    except Exception as e:
+        # one bad app must not kill the whole dashboard
+        results[name].error = f"appstore: {type(e).__name__}: {e}"
 
 
 # endregion

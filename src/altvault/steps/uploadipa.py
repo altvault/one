@@ -12,7 +12,7 @@ from altvault.steps.base import Context, Step
 class UploadIpaStep(Step):
     def run(self, context: Context) -> None:
         if not context.current_ipa_path:
-            raise ValueError
+            raise ValueError("current_ipa_path is not set; nothing to upload")
         if not context.app_version or context.app_version == "latest":
             context.app_version = extract_ipa_metadata(context.current_ipa_path).version
         if not context.tweak_version_label:

@@ -14,6 +14,7 @@ from altvault.version import safe_version
 def _fetch_cydia_repo(url: str) -> list[Packages]:
     packages_gz_url = f"{url}/Packages.gz"
     response = httpx.get(packages_gz_url)
+    response.raise_for_status()
     content = gzip.decompress(response.content).decode("utf-8")
     packages = list(Packages.iter_paragraphs(content, use_apt_pkg=False))
     return packages
@@ -43,7 +44,10 @@ class CydiaRepoFile(DownloadFile):
                 (p for p in filtered_packages if p["Version"] == self.version), None
             )
         if not selected_package:
-            raise ValueError("Not found")
+            raise ValueError(
+                f"Package not found: {self.package} {self.version} "
+                f"({self.architecture}) in {self.repo}"
+            )
         if self.use_version:
             context.tweak_version_label = selected_package["Version"]
 

@@ -9,7 +9,7 @@ from altvault.steps.base import Context, Step, StepResult
 class IpapatchStep(Step):
     def run(self, context: Context) -> None:
         if not context.current_ipa_path:
-            raise ValueError
+            raise ValueError("current_ipa_path is not set; no input IPA")
 
         step_path: Path = context.work_dir / "ipapatch"
         step_path.mkdir()

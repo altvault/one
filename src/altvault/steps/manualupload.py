@@ -13,12 +13,12 @@ class ManualUploadStep(Step):
 
         file_path_input = questionary.path("IPA Path").ask()
         if file_path_input is None:
-            raise ValueError
+            raise ValueError("No IPA path provided")
         file_path = Path(file_path_input).expanduser()
 
         url = questionary.path("URL").ask()
         if url is None:
-            raise ValueError
+            raise ValueError("No URL provided")
 
         tweak_version_label = questionary.path("Tweak Version").ask()
         context.tweak_version_label = tweak_version_label

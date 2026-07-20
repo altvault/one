@@ -26,7 +26,7 @@ def main():
             use_shortcuts=True,
         ).ask()
         if command is None:
-            raise ValueError
+            raise ValueError("No command selected")
         args = parser.parse_args([command])
 
     args.func(args)

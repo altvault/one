@@ -27,7 +27,7 @@ def run(args: argparse.Namespace):
         app_version = questionary.text("app_version:", default="latest").ask()
 
     if not tweak_name or not app_version:
-        raise ValueError
+        raise ValueError("Missing tweak_name or app_version")
 
     if questionary.confirm(f"Dispatch pipeline for {tweak_name} {app_version}").ask():
         github_client = create_github_client()

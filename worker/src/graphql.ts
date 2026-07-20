@@ -29,6 +29,9 @@ export async function queryGithub<T>({
     },
     body: JSON.stringify({ query, variables }),
   });
+  if (!response.ok) {
+    throw new Error(`GitHub GraphQL request failed: ${response.status}`);
+  }
   const result = (await response.json()) as QueryResponse<T>;
   if (result.errors && result.errors.length > 0) {
     throw new Error(result.errors[0].message);
