@@ -1,5 +1,4 @@
 import gzip
-import hashlib
 from dataclasses import dataclass
 from os.path import basename
 from urllib.parse import urljoin, urlparse
@@ -51,18 +50,15 @@ class CydiaRepoFile(DownloadFile):
         download_url = urljoin(f"{self.repo}/", selected_package["Filename"])
 
         with httpx.stream("GET", download_url, follow_redirects=True) as r:
+            r.raise_for_status()
             file_path = context.work_dir / basename(urlparse(download_url).path)
-            sha256 = hashlib.sha256()
-            with open(file_path, "wb") as f:
-                for chunk in r.iter_bytes():
-                    f.write(chunk)
-                    sha256.update(chunk)
+            sha256 = self.stream_to_file(r.iter_bytes(), file_path)
 
         extracted_files = self.extract_deb_files(context, file_path)
 
         return FileInfo(
             path=file_path,
             url=download_url,
-            sha256=sha256.hexdigest(),
+            sha256=sha256,
             extracted_files=extracted_files,
         )

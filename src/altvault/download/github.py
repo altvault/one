@@ -1,4 +1,3 @@
-import hashlib
 from dataclasses import dataclass
 
 from altvault.download.base import DownloadFile
@@ -56,17 +55,13 @@ class GitHubReleaseFile(DownloadFile):
             headers={"Accept": "application/octet-stream"},
         )
         file_path = context.work_dir / asset_to_download.name
-        sha256 = hashlib.sha256()
-        with open(file_path, "wb") as f:
-            for chunk in download_asset.iter_bytes():
-                f.write(chunk)
-                sha256.update(chunk)
+        sha256 = self.stream_to_file(download_asset.iter_bytes(), file_path)
 
         extracted_files = self.extract_deb_files(context, file_path)
 
         return FileInfo(
             path=file_path,
             url=asset_to_download.browser_download_url,
-            sha256=sha256.hexdigest(),
+            sha256=sha256,
             extracted_files=extracted_files,
         )

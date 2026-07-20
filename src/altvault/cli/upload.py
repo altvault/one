@@ -5,7 +5,7 @@ from pathlib import Path
 import questionary
 from githubkit.exception import RequestFailed
 
-from altvault.github import GITHUB_OWNER, create_github_client
+from altvault.github import GITHUB_OWNER, create_github_client, upload_release_asset
 from altvault.ipa import extract_ipa_metadata
 from altvault.recipes import get_recipe
 from altvault.version import safe_version
@@ -45,7 +45,6 @@ def run(args: argparse.Namespace):
         raise ValueError
 
     ipa_filename = ipa_path.name
-    ipa_filesize = ipa_path.stat().st_size
 
     metadata = extract_ipa_metadata(ipa_path)
 
@@ -96,17 +95,12 @@ def run(args: argparse.Namespace):
         )
 
         # upload
-        with open(ipa_path, "rb") as f:
-            github_client.request(
-                "POST",
-                release.parsed_data.upload_url.split("{?")[0],
-                params={"name": ipa_filename},
-                content=f.read(),
-                headers={
-                    "Content-Type": "application/octet-stream",
-                    "Content-Length": str(ipa_filesize),
-                },
-            )
+        upload_release_asset(
+            github_client,
+            release.parsed_data.upload_url,
+            ipa_path,
+            asset_name=ipa_filename,
+        )
 
         if questionary.confirm("Delete file?", default=True).ask():
             subprocess.run(["trash", ipa_path])

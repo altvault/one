@@ -3,7 +3,7 @@ import json
 from dataclasses import dataclass
 from zoneinfo import ZoneInfo
 
-from altvault.github import GITHUB_OWNER
+from altvault.github import GITHUB_OWNER, upload_release_asset
 from altvault.ipa import extract_ipa_metadata
 from altvault.steps.base import Context, Step
 
@@ -36,24 +36,18 @@ class UploadIpaStep(Step):
             tag_name=release_tag,
             body=release_body,
         )
-        upload_url = release.parsed_data.upload_url.split("{?")[0]
-        with open(context.current_ipa_path, "rb") as f:
-            context.github_client.request(
-                "POST",
-                upload_url,
-                params={"name": file_name},
-                content=f.read(),
-                headers={"Content-Type": "application/octet-stream"},
-            )
+        upload_release_asset(
+            context.github_client,
+            release.parsed_data.upload_url,
+            context.current_ipa_path,
+            asset_name=file_name,
+        )
 
         for step_result in context.step_results:
             if step_result.name == "cyan":
                 for file_info in step_result.data:
-                    with open(file_info.path, "rb") as f:
-                        context.github_client.request(
-                            "POST",
-                            upload_url,
-                            params={"name": file_info.path.name},
-                            content=f.read(),
-                            headers={"Content-Type": "application/octet-stream"},
-                        )
+                    upload_release_asset(
+                        context.github_client,
+                        release.parsed_data.upload_url,
+                        file_info.path,
+                    )

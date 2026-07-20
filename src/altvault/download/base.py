@@ -1,5 +1,7 @@
+import hashlib
 import subprocess
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -13,6 +15,16 @@ class DownloadFile(ABC):
 
     @abstractmethod
     def download(self, context: Context) -> FileInfo: ...
+
+    @staticmethod
+    def stream_to_file(chunks: Iterable[bytes], file_path: Path) -> str:
+        """Write chunks to file_path, returning the sha256 hex digest."""
+        sha256 = hashlib.sha256()
+        with open(file_path, "wb") as f:
+            for chunk in chunks:
+                f.write(chunk)
+                sha256.update(chunk)
+        return sha256.hexdigest()
 
     def extract_deb_files(self, context: Context, file_path: Path) -> list[Path]:
         extracted_files = []
