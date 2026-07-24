@@ -4,6 +4,16 @@ import { parseMetadata } from "./metadata";
 
 const app = factory.createApp();
 
+const formatter = new Intl.DateTimeFormat("en-TH", {
+  timeZone: "Asia/Bangkok",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+});
+
 app.get("/", async (c) => {
   const queryResult = await query({ token: c.get("github_token") });
 
@@ -24,7 +34,10 @@ app.get("/", async (c) => {
               bundleIdentifier: bundleIdentifier,
               version: repo.latestRelease.tagName,
               // subtitle: asset.name,
-              localizedDescription: asset.name,
+              localizedDescription: `${asset.name}${asset.createdAt
+                  ? "\n" + formatter.format(new Date(asset.createdAt))
+                  : ""
+                }`,
               // downloadURL: asset.url,
               downloadURL: new URL(
                 `/download/${repo.name}/${repo.latestRelease.tagName}/${asset.name}`,
