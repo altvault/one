@@ -10,6 +10,23 @@ recipe = Recipe(
     bundle_identifier="com.atebits.Tweetie2",
     telegram_bot="FastDecryptBot",
     tweaks=[
+        Tweak(
+            name="TheacratNFB",
+            pipeline=[
+                DownloadIpaStep(),
+                CyanStep(
+                    download_files=[
+                        GitHubReleaseFile(
+                            owner="theacrat",
+                            repo="NeoFreeBird",
+                            endswith="arm.deb",
+                            use_version=True,
+                        )
+                    ]
+                ),
+                UploadIpaStep(),
+            ],
+        ),
         Tweak(name="DLTwitter", pipeline=[ManualUploadStep(), UploadIpaStep()]),
         Tweak(
             name="BHTwitter",
