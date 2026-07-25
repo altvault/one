@@ -95,11 +95,17 @@ async def check_fork_behind(
         if parent and parent.owner:
             base = f"{parent.owner.login}:{parent.default_branch}"
             head = f"{repo.owner.login}:{repo.default_branch}"
-            compared = (
-                await github_client.rest.repos.async_compare_commits(
-                    owner=repo.owner.login, repo=repo.name, basehead=f"{base}...{head}"
-                )
-            ).parsed_data
+            try:
+                compared = (
+                    await github_client.rest.repos.async_compare_commits(
+                        owner=repo.owner.login,
+                        repo=repo.name,
+                        basehead=f"{base}...{head}",
+                    )
+                ).parsed_data
+            except Exception as e:
+                print(repo.name, f"{base}...{head}")
+                raise e
             return CheckForkBehindResult(
                 url=repo.html_url,
                 status=compared.status,
