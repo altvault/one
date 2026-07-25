@@ -38,7 +38,8 @@ recipe = Recipe(
                         GitHubReleaseFile(
                             owner="faroukbmiled",
                             repo="RyukGram",
-                            endswith="rootless.deb",
+                            startswith="RyukGram_",
+                            endswith="_rootless.deb",
                             use_version=True,
                             extract_deb_file_list=["RyukGram.dylib", "RyukGram.bundle"],
                         )
